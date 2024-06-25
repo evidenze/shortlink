@@ -18,6 +18,11 @@ describe('ShortenerController (e2e)', () => {
         url,
       },
     }),
+    decode: async () => ({
+      status: true,
+      message: 'URL decoded successfully',
+      data: url,
+    }),
   };
 
   beforeAll(async () => {
@@ -42,6 +47,18 @@ describe('ShortenerController (e2e)', () => {
         expect(res.body.message).toBe('URL has been shortened successfully');
         expect(res.body.data).toHaveProperty('shortUrl');
         expect(res.body.data).toHaveProperty('url', `${url}`);
+      });
+  });
+
+  it('/POST decode', () => {
+    return request(app.getHttpServer())
+      .post('/decode')
+      .send({ url: shortUrl })
+      .expect(201)
+      .expect((res) => {
+        expect(res.body.status).toBe(true);
+        expect(res.body.message).toBe('URL decoded successfully');
+        expect(res.body.data).toBe(url);
       });
   });
 });

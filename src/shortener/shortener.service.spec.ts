@@ -25,4 +25,14 @@ describe('ShortenerService', () => {
     expect(result.data).toHaveProperty('shortUrl');
     expect(result.data.url).toBe(url);
   });
+
+  it('should decode a URL', async () => {
+    const encodeResult = await service.encode(url);
+    const shortUrl = encodeResult.data.shortUrl;
+
+    const decodeResult = await service.decode(shortUrl);
+    expect(decodeResult.status).toBe(true);
+    expect(decodeResult.message).toBe('URL decoded successfully');
+    expect(decodeResult.data).toBe(url);
+  });
 });

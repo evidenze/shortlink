@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
 const mainUrl = `http://short.est`;
@@ -26,6 +26,27 @@ export class ShortenerService {
         shortUrl: `${mainUrl}/${id}`,
         url,
       },
+    };
+  }
+
+  /**
+   * Decode URL.
+   *
+   * @param urlId
+   * @returns
+   */
+  async decode(shortUrl: string): Promise<any> {
+    const id = shortUrl.split('/').pop();
+    const record = this.urlDatabase[id];
+
+    if (!record) {
+      throw new NotFoundException('Short URL not found');
+    }
+
+    return {
+      status: true,
+      message: 'URL decoded successfully',
+      data: record.url,
     };
   }
 }
