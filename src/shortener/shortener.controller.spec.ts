@@ -32,6 +32,10 @@ describe('ShortenerController (e2e)', () => {
         createdAt: new Date(),
       },
     }),
+    visitUrl: async () => ({
+      url,
+    }),
+    incrementHits: async () => {},
   };
 
   beforeAll(async () => {
@@ -82,5 +86,12 @@ describe('ShortenerController (e2e)', () => {
         expect(res.body.data).toHaveProperty('hits', 0);
         expect(res.body.data).toHaveProperty('createdAt');
       });
+  });
+
+  it('/GET :id (redirect)', () => {
+    return request(app.getHttpServer())
+      .get('/abc123')
+      .expect(302)
+      .expect('Location', url);
   });
 });

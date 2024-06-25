@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Redirect } from '@nestjs/common';
 import { ShortenerService } from './shortener.service';
 import { EncodeUrlDto } from './dto/encode.dto';
 import { DecodeUrlDto } from './dto/decode.dto';
@@ -20,5 +20,11 @@ export class ShortenerController {
   @Get('statistic/:id')
   async getStatistics(@Param('id') id: string) {
     return await this.shortenerService.getStatistics(id);
+  }
+
+  @Get(':id')
+  @Redirect()
+  async redirect(@Param('id') id: string) {
+    return await this.shortenerService.visitUrl(id);
   }
 }

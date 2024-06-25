@@ -69,4 +69,39 @@ export class ShortenerService {
       data: record,
     };
   }
+
+  /**
+   * Visit url.
+   *
+   * @param urlId
+   * @returns string
+   */
+  async visitUrl(urlId: string): Promise<string> {
+    const shortUrl = `${mainUrl}/${urlId}`;
+    const id = shortUrl.split('/').pop();
+    const record = this.urlDatabase[id];
+
+    if (!record) {
+      throw new NotFoundException('Short URL not found');
+    }
+
+    this.incrementHits(urlId);
+
+    return record.url;
+  }
+
+  /**
+   * Increment URL hits.
+   *
+   * @param id
+   */
+  async incrementHits(id: string): Promise<void> {
+    const record = this.urlDatabase[id];
+
+    if (!record) {
+      throw new NotFoundException('Short URL not found');
+    }
+
+    record.hits++;
+  }
 }
