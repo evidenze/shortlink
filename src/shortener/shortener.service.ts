@@ -49,4 +49,24 @@ export class ShortenerService {
       data: record.url,
     };
   }
+
+  /**
+   * Get URL statistics.
+   *
+   * @param id
+   * @returns {object}
+   */
+  async getStatistics(id: string): Promise<any> {
+    const record = this.urlDatabase[id];
+
+    if (!record) {
+      throw new NotFoundException('Short URL not found');
+    }
+
+    return {
+      status: true,
+      message: 'Statistics fetched successfully',
+      data: record,
+    };
+  }
 }

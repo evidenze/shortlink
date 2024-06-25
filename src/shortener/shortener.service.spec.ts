@@ -35,4 +35,16 @@ describe('ShortenerService', () => {
     expect(decodeResult.message).toBe('URL decoded successfully');
     expect(decodeResult.data).toBe(url);
   });
+
+  it('should get statistics for a URL', async () => {
+    const encodeResult = await service.encode(url);
+    const urlId = encodeResult.data.shortUrl.split('/').pop();
+
+    const statsResult = await service.getStatistics(urlId);
+    expect(statsResult.status).toBe(true);
+    expect(statsResult.message).toBe('Statistics fetched successfully');
+    expect(statsResult.data).toHaveProperty('url', url);
+    expect(statsResult.data).toHaveProperty('hits', 0);
+    expect(statsResult.data).toHaveProperty('createdAt');
+  });
 });

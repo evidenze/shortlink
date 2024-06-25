@@ -23,6 +23,15 @@ describe('ShortenerController (e2e)', () => {
       message: 'URL decoded successfully',
       data: url,
     }),
+    getStatistics: async () => ({
+      status: true,
+      message: 'Statistics fetched successfully',
+      data: {
+        url,
+        hits: 0,
+        createdAt: new Date(),
+      },
+    }),
   };
 
   beforeAll(async () => {
@@ -59,6 +68,19 @@ describe('ShortenerController (e2e)', () => {
         expect(res.body.status).toBe(true);
         expect(res.body.message).toBe('URL decoded successfully');
         expect(res.body.data).toBe(url);
+      });
+  });
+
+  it('/GET statistic/:id', () => {
+    return request(app.getHttpServer())
+      .get('/statistic/abc123')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.status).toBe(true);
+        expect(res.body.message).toBe('Statistics fetched successfully');
+        expect(res.body.data).toHaveProperty('url', url);
+        expect(res.body.data).toHaveProperty('hits', 0);
+        expect(res.body.data).toHaveProperty('createdAt');
       });
   });
 });
